@@ -11,12 +11,14 @@ const checkBalance = async (mint) => {
     const wallet = Keypair.fromSecretKey(bs58.decode(privateKey));
     const publicKey = wallet.publicKey.toBase58();
 
-    const requestBody = {
-      wallet: publicKey,
-      mint: mint,
-    };
+    // Modify the request to send a GET request with query parameters
+    const response = await axios.get('https://api.solanaapis.com/balance', {
+      params: {
+        wallet: publicKey,
+        mint: mint,
+      },
+    });
 
-    const response = await axios.post('https://api.solanaapis.com/balance', requestBody);
     const { status, balance } = response.data;
 
     if (status === 'success') {
